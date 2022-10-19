@@ -5,6 +5,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import java.time.ZonedDateTime;
 import java.util.EnumSet;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 public class RandomUtil {
     public static String getRandomEmail(final int length) {
@@ -12,7 +13,7 @@ public class RandomUtil {
                 + "@"
                 + RandomStringUtils.random(5, true, false)
                 + "."
-                + RandomStringUtils.random(2, true, false) ;
+                + RandomStringUtils.random(2, true, false);
     }
 
     public static String getRandomString(final int minLength, final int maxLength) {
@@ -33,7 +34,7 @@ public class RandomUtil {
 
     public static <T extends Enum<T>> T getRandomEnum(final Class<T> enumClass) {
         final EnumSet<T> allEnums = EnumSet.allOf(enumClass);
-        return allEnums.stream().toList().get(getRandomIndex(0,
+        return allEnums.stream().collect(Collectors.toList()).get(getRandomIndex(0,
                 allEnums.size() - 1));
     }
 

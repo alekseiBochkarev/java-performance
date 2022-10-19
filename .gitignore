@@ -1,0 +1,16 @@
+#IntelliJ
+*.iml
+.idea/
+bin/
+#Eclipse
+.project
+.settings
+.classpath
+.metadata
+user-platform-backend/.env
+target/
+pom.xml.versionsBackup
+build/
+allure-results
+.allure
+

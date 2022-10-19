@@ -87,5 +87,10 @@ public class BaseAuthData {
         return APPLICATION_URL() + "/user/v1/roles";
     }
 
+    protected String getPetStoreUserUrl()
+    {
+        return APPLICATION_URL() + "/user";
+    }
+
 
 }

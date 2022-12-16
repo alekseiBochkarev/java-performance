@@ -47,4 +47,6 @@ public interface LoadTestsConfig extends Config {
     String user_platform_url();
     @Key("itemQuantity")
     int itemQuantity();
+    @Key("delete-data-after-tests")
+    boolean delete_data_after_tests();
 }

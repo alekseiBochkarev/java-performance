@@ -2,6 +2,7 @@ package base;
 
 import config.LoadTestsConfig;
 import org.aeonbits.owner.ConfigFactory;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.junit.jupiter.api.BeforeAll;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
@@ -22,6 +23,7 @@ public class BaseAuthData {
     protected static int MAX_DELAY_TIME_FOR_CREATE_BATCH;
     protected static int MAX_DELAY_TIME_FOR_UPDATE;
     protected static boolean GET_TOKEN_EVERY_TIME;
+    protected static boolean DELETE_DATA_AFTER_TESTS;
 
     @BeforeAll
     public static void setUp() {
@@ -45,6 +47,7 @@ public class BaseAuthData {
         MAX_DELAY_TIME_FOR_CREATE_BATCH = config().max_delay_time_for_create_batch();
         MAX_DELAY_TIME_FOR_UPDATE = config().max_delay_time_for_update();
         GET_TOKEN_EVERY_TIME = config().get_token_every_time();
+        DELETE_DATA_AFTER_TESTS = config().delete_data_after_tests();
         JmeterUtil.setInfluxDbPath(config().influx_db_path());
         JmeterUtil.setUSE_BLAZEMETER_ENGINE(config().use_blazemeter_engine());
         JmeterUtil.setUSE_INFLUX_DB_LISTENER(config().use_influx_db_listener());
@@ -92,5 +95,35 @@ public class BaseAuthData {
         return APPLICATION_URL() + "/user";
     }
 
+    protected static String getGroupUrl() {
+        return APPLICATION_URL() + "/user/v1/groups";
+    }
 
+    protected static String getVirtualDbGroupUrl() {
+        return APPLICATION_URL() + "/user/v1/virtual-database-groups";
+    }
+
+    protected static String getVirtualDbUrl() {
+        return APPLICATION_URL() + "/user/v1/virtual-databases";
+    }
+
+    protected static String getOrgUnitUrl() {
+        return APPLICATION_URL() + "/user/v1/organizational-units";
+    }
+
+    protected String getVariable(String variable) {
+        return JMeterContextService.getContext().getVariables().get(variable);
+    }
+
+    protected static String getGroupMembershipUrl() {
+        return APPLICATION_URL() + "/user/v1/group-memberships";
+    }
+
+    protected static String getUserDataValuesUrl() {
+        return APPLICATION_URL() + "/user/v1/users/user-data/values";
+    }
+
+    protected static String getUserUrl() {
+        return APPLICATION_URL() + "/user/v1/users";
+    }
 }

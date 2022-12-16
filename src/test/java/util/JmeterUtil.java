@@ -21,6 +21,7 @@ import java.util.concurrent.TimeoutException;
 
 import static us.abstracta.jmeter.javadsl.JmeterDsl.*;
 import static us.abstracta.jmeter.javadsl.JmeterDsl.influxDbListener;
+import static us.abstracta.jmeter.javadsl.dashboard.DashboardVisualizer.dashboardVisualizer;
 
 public class JmeterUtil {
     private static final String CLIENT_ID = "";
@@ -147,6 +148,88 @@ public class JmeterUtil {
                                     new BaseThreadGroup.ThreadGroupChild[] { dslHttpSampler,
                                             dslHttpSampler2,
                                             resultsTreeVisualizer() }) })
+                            .run();
+        }
+        catch (InterruptedException | TimeoutException | IOException var5) {
+            throw new RuntimeException(var5);
+        }
+    }
+
+    public TestPlanStats getTestPlanStats(final int threads,
+                                          final int iterations,
+                                          final DslHttpSampler dslHttpSampler,
+                                          final DslHttpSampler dslHttpSampler2,
+                                          final DslHttpSampler dslHttpSampler3) {
+        try {
+            return this.USE_BLAZEMETER_ENGINE ?
+                    JmeterDsl.testPlan(new DslTestPlan.TestPlanChild[] { JmeterDsl.threadGroup(
+                                    threads,
+                                    iterations,
+                                    new BaseThreadGroup.ThreadGroupChild[] { dslHttpSampler,
+                                            dslHttpSampler2, dslHttpSampler3 }) })
+                            .runIn((new BlazeMeterEngine(this.CLIENT_ID + ":" + this.CLIENT_SECRET))
+                                    .testName("Division performance tests").totalUsers(10)
+                                    .holdFor(
+                                            Duration.ofMinutes(10L)).threadsPerEngine(5)
+                                    .testTimeout(Duration.ofMinutes(20L)))
+                    : this.USE_INFLUX_DB_LISTENER ?
+                    JmeterDsl.testPlan(new DslTestPlan.TestPlanChild[] { JmeterDsl.threadGroup(
+                                    threads,
+                                    iterations,
+                                    dslHttpSampler,
+                                    dslHttpSampler2,
+                                    dslHttpSampler3,
+                                    influxDbListener(INFLUX_DB_PATH)) })
+                            .run()
+                    :
+                    JmeterDsl.testPlan(new DslTestPlan.TestPlanChild[] { JmeterDsl.threadGroup(
+                                    threads,
+                                    iterations,
+                                    new BaseThreadGroup.ThreadGroupChild[] { dslHttpSampler,
+                                            dslHttpSampler2, dslHttpSampler3,
+                                            resultsTreeVisualizer(), dashboardVisualizer() }) })
+                            .run();
+        }
+        catch (InterruptedException | TimeoutException | IOException var5) {
+            throw new RuntimeException(var5);
+        }
+    }
+
+    public TestPlanStats getTestPlanStats(final int threads,
+                                          final int iterations,
+                                          final DslHttpSampler dslHttpSampler,
+                                          final DslHttpSampler dslHttpSampler2,
+                                          final DslHttpSampler dslHttpSampler3,
+                                          final DslHttpSampler dslHttpSampler4) {
+        try {
+            return this.USE_BLAZEMETER_ENGINE ?
+                    JmeterDsl.testPlan(new DslTestPlan.TestPlanChild[] { JmeterDsl.threadGroup(
+                                    threads,
+                                    iterations,
+                                    new BaseThreadGroup.ThreadGroupChild[] { dslHttpSampler,
+                                            dslHttpSampler2, dslHttpSampler3, dslHttpSampler4}) })
+                            .runIn((new BlazeMeterEngine(this.CLIENT_ID + ":" + this.CLIENT_SECRET))
+                                    .testName("Division performance tests").totalUsers(10)
+                                    .holdFor(
+                                            Duration.ofMinutes(10L)).threadsPerEngine(5)
+                                    .testTimeout(Duration.ofMinutes(20L)))
+                    : this.USE_INFLUX_DB_LISTENER ?
+                    JmeterDsl.testPlan(new DslTestPlan.TestPlanChild[] { JmeterDsl.threadGroup(
+                                    threads,
+                                    iterations,
+                                    dslHttpSampler,
+                                    dslHttpSampler2,
+                                    dslHttpSampler3,
+                                    dslHttpSampler4,
+                                    influxDbListener(INFLUX_DB_PATH)) })
+                            .run()
+                    :
+                    JmeterDsl.testPlan(new DslTestPlan.TestPlanChild[] { JmeterDsl.threadGroup(
+                                    threads,
+                                    iterations,
+                                    new BaseThreadGroup.ThreadGroupChild[] { dslHttpSampler,
+                                            dslHttpSampler2, dslHttpSampler3, dslHttpSampler4,
+                                            resultsTreeVisualizer(), dashboardVisualizer() }) })
                             .run();
         }
         catch (InterruptedException | TimeoutException | IOException var5) {
